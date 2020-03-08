@@ -1,6 +1,4 @@
 from rest_framework import serializers
-from rest_framework.fields import CurrentUserDefault
-
 
 from .models import (
     Candidate,
@@ -25,6 +23,3 @@ class EngagementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Engagement
         fields = '__all__'
-
-    # def save(self):
-

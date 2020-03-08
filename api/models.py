@@ -15,6 +15,9 @@ class Engagement(models.Model):
     state = models.CharField(max_length=2, choices=STATES_CHOICES)
     last_change_date = models.DateTimeField(default=datetime.now)
 
+    def change_state(self, new_state):
+        self.state = new_state
+
 
 class Recruiter(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
@@ -22,7 +25,6 @@ class Recruiter(models.Model):
 
     def get_accepted_engagements(self):
         return Engagement.objects \
-            .select_related() \
             .filter(recruiter=self) \
             .filter(state='CA')
 
@@ -41,11 +43,10 @@ class Candidate(models.Model):
     wishes_info_extended = models.TextField()
     extra_info_extended = models.TextField()
 
-    def get_all_engagements(self):
+    def get_engagements(self):
         return Engagement.objects \
-            .select_related() \
             .filter(candidate=self) \
-            .filter(state__ne='RA')
+            .filter(state='RA')
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name}"

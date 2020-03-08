@@ -1,9 +1,10 @@
 from rest_framework import routers
 
-from .views import *
-
+from .viewset import (
+    CandidateViewSet,
+    RecruiterViewSet
+)
 
 router = routers.DefaultRouter()
-router.register('candidates', CandidateViewSet)
-router.register('recruiters', RecruiterViewSet)
-router.register('engagements', EngagementViewSet)
+router.register(r'candidates', CandidateViewSet)
+router.register(r'recruiters', RecruiterViewSet)

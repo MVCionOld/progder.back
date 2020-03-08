@@ -1,6 +1,6 @@
-from rest_framework import viewsets, serializers
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from .models import (
     Candidate,
@@ -8,24 +8,51 @@ from .models import (
     Engagement
 )
 from .serializers import (
-    CandidateSerializer,
-    RecruiterSerializer,
     EngagementSerializer
 )
 
 
-class CandidateViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Candidate.objects.all()
-    serializer_class = CandidateSerializer
+@api_view(['GET', 'POST'])
+def recruiter_engagement_list(request):
+    current_user = request.user
+    if request.method == 'GET':
+        try:
+            engagements = Recruiter.objects\
+                .get(user=current_user)\
+                .get_accepted_engagements()
+        except Engagement.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        engagement_serializer = EngagementSerializer(engagements, many=True)
+        return Response(engagement_serializer.data)
+    elif request.method == 'POST':
+        engagement_serializer = EngagementSerializer(data=request.data)
+        if engagement_serializer.is_valid():
+            engagement_serializer.save()
+            return Response(engagement_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(engagement_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class RecruiterViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Recruiter.objects.all()
-    serializer_class = RecruiterSerializer
+@api_view(['GET'])
+def candidate_engagement_list(request):
+    current_user = request.user
+    try:
+        engagements = Candidate.objects\
+            .get(user=current_user)\
+            .get_engagements()
+    except Engagement.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    engagement_serializer = EngagementSerializer(engagements, many=True)
+    return Response(engagement_serializer.data)
 
 
-class EngagementViewSet(viewsets.ModelViewSet):
-    queryset = Engagement.objects.all() #filter(candidate__user=serializers.CurrentUserDefault())
-    serializer_class = EngagementSerializer
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (IsAuthenticated,)
+@api_view(['PUT'])
+def candidate_engagement(request, pk):
+    try:
+        engagement = Engagement.objects.get(pk=pk)
+    except Engagement.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    engagement_serializer = EngagementSerializer(engagement, data=request.data)
+    if engagement_serializer.is_valid():
+        engagement_serializer.save()
+        return Response(engagement_serializer.data, status=status.HTTP_201_CREATED)
+    return Response(engagement_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

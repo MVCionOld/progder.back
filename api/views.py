@@ -28,16 +28,22 @@ def recruiter_engagement_list(request):
         engagement_serializer = EngagementSerializer(data=request.data)
         if engagement_serializer.is_valid():
             engagement_serializer.save()
-            return Response(engagement_serializer.data, status=status.HTTP_201_CREATED)
-        return Response(engagement_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                engagement_serializer.data,
+                status=status.HTTP_201_CREATED
+            )
+        return Response(
+            engagement_serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 @api_view(['GET'])
 def candidate_engagement_list(request):
     current_user = request.user
     try:
-        engagements = Candidate.objects\
-            .get(user=current_user)\
+        engagements = Candidate.objects \
+            .get(user=current_user) \
             .get_engagements()
     except Engagement.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)

@@ -8,9 +8,9 @@ from .views import (
 )
 
 urlpatterns = [
-    path(r'engagements/candidate/<int:pk>', candidate_engagement),
-    path(r'engagements/candidate/list/', candidate_engagement_list),
-    path(r'engagements/recruiter/list/', recruiter_engagement_list),
+    path(r'list/candidate/<int:pk>', candidate_engagement),
+    path(r'list/candidate', candidate_engagement_list),
+    path(r'list/recruiter', recruiter_engagement_list),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

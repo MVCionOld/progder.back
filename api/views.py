@@ -17,8 +17,8 @@ def recruiter_engagement_list(request):
     current_user = request.user
     if request.method == 'GET':
         try:
-            engagements = Recruiter.objects\
-                .get(user=current_user)\
+            engagements = Recruiter.objects \
+                .get(user=current_user) \
                 .get_accepted_engagements()
         except Engagement.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)

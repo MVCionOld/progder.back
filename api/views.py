@@ -1,5 +1,7 @@
+from rest_framework import permissions
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 
 from .models import (
@@ -8,8 +10,22 @@ from .models import (
     Engagement
 )
 from .serializers import (
+    CandidateAuthSerializer,
+    RecruiterAuthSerializer,
     EngagementSerializer
 )
+
+
+class CandidateAuthView(CreateAPIView):
+    model = Candidate
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = CandidateAuthSerializer
+
+
+class RecruiterAuthView(CreateAPIView):
+    model = Recruiter
+    permission_classes = (permissions.AllowAny,)
+    serializer_class = RecruiterAuthSerializer
 
 
 @api_view(['GET', 'POST'])

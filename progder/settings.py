@@ -1,5 +1,6 @@
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -14,9 +15,11 @@ SECRET_KEY = 'mup(0oue2-i02%ucc8*z%kie)5)+3kf%-@i*wizn&n$0%qv()!'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '0.0.0.0',
+    'localhost',
     '127.0.0.1'
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Application definition
@@ -29,11 +32,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'api',
     'core',
+
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -48,7 +54,10 @@ ROOT_URLCONF = 'progder.urls'
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
-    'URL_FORMAT_OVERRIDE': None
+    'URL_FORMAT_OVERRIDE': None,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication'
+    )
 }
 
 TEMPLATES = [

@@ -47,7 +47,7 @@ class CandidateAuthSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         candidate = Candidate.objects.create(
-            user=self.get_fields()['user'].create(validated_data),
+            user=self.get_fields()['user'].create(validated_data['user']),
             personal_info=validated_data['personal_info'],
             skills_info=validated_data['skills_info'],
             wishes_info=validated_data['wishes_info'],

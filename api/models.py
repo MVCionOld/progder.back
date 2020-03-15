@@ -49,10 +49,11 @@ class Recruiter(models.Model):
 
     def interview_candidates(self):
         all_candidates = Candidate.objects.all()
-        known_candidates = Engagement.objects\
-            .get(recruiter=self) \
-            .all() \
-            .values('candidate')
+        known_candidates_id = Engagement.objects \
+            .filter(recruiter=self) \
+            .select_related() \
+            .values_list('candidate')
+        known_candidates = Candidate.objects.filter(user_id__in=known_candidates_id)
         return all_candidates.difference(known_candidates)
 
     def __str__(self):

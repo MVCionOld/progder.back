@@ -12,7 +12,8 @@ from .models import (
 from .serializers import (
     CandidateAuthSerializer,
     RecruiterAuthSerializer,
-    EngagementSerializer
+    EngagementSerializer,
+    CandidateComplexSerializer
 )
 
 
@@ -52,6 +53,19 @@ def recruiter_engagement_list(request):
             engagement_serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
+
+
+@api_view(['GET'])
+def recruiter_engagement_list_new(request):
+    current_user = request.user
+    try:
+        engagements = Recruiter.objects \
+            .get(user=current_user) \
+            .interview_candidates()
+    except Engagement.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    candidate_serializer = CandidateComplexSerializer(engagements, many=True)
+    return Response(candidate_serializer.data)
 
 
 @api_view(['GET'])

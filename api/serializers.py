@@ -34,7 +34,7 @@ class UserAuthSerializer(serializers.ModelSerializer):
         read_only_fields = ('id',)
 
 
-class CandidateSerializerBasic(serializers.ModelSerializer):
+class CandidateBasicSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 
     class Meta:
@@ -75,7 +75,7 @@ class CandidateAuthSerializer(serializers.ModelSerializer):
         )
 
 
-class CandidateSerializerFull(serializers.ModelSerializer):
+class CandidateComplexSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 
     class Meta:
@@ -83,7 +83,7 @@ class CandidateSerializerFull(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class RecruiterSerializerBasic(serializers.ModelSerializer):
+class RecruiterBasicSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 
     class Meta:
@@ -107,7 +107,7 @@ class RecruiterAuthSerializer(serializers.ModelSerializer):
         fields = ('user', 'company_name')
 
 
-class RecruiterSerializerFull(serializers.ModelSerializer):
+class RecruiterComplexSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 
     class Meta:
@@ -116,8 +116,8 @@ class RecruiterSerializerFull(serializers.ModelSerializer):
 
 
 class EngagementSerializer(serializers.ModelSerializer):
-    candidate = CandidateSerializerBasic()
-    recruiter = RecruiterSerializerBasic()
+    candidate = CandidateBasicSerializer()
+    recruiter = RecruiterBasicSerializer()
 
     class Meta:
         model = Engagement

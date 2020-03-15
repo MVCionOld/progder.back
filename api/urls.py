@@ -5,6 +5,7 @@ from .views import (
     candidate_engagement,
     candidate_engagement_list,
     recruiter_engagement_list,
+    recruiter_engagement_list_new,
     CandidateAuthView,
     RecruiterAuthView
 )
@@ -13,6 +14,7 @@ urlpatterns = [
     path(r'list/candidate/<int:pk>', candidate_engagement),
     path(r'list/candidate', candidate_engagement_list),
     path(r'list/recruiter', recruiter_engagement_list),
+    path(r'list/recruiter/new', recruiter_engagement_list_new),
     path(r'register/candidate', CandidateAuthView.as_view()),
     path(r'register/recruiter', RecruiterAuthView.as_view())
 ]

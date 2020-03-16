@@ -90,13 +90,11 @@ def candidate_engagement_list(request):
 
 
 @api_view(['PUT'])
-def candidate_engagement(request, pk):
+def candidate_engagement(request, id):
     try:
-        engagement = Engagement.objects.get(pk=pk)
+        engagement = Engagement.objects.get(id=id)
     except Engagement.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    engagement_serializer = EngagementSerializer(engagement, data=request.data)
-    if engagement_serializer.is_valid():
-        engagement_serializer.save()
-        return Response(engagement_serializer.data, status=status.HTTP_201_CREATED)
-    return Response(engagement_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    engagement.state = request.data["state"]
+    engagement.save(update_fields=["state"])
+    return Response(data="ok", status=status.HTTP_202_ACCEPTED)

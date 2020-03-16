@@ -11,7 +11,7 @@ from .views import (
 )
 
 urlpatterns = [
-    path(r'engagement/candidate/<int:pk>', candidate_engagement),
+    path(r'engagement/candidate/<int:id>', candidate_engagement),
     path(r'engagement/candidate', candidate_engagement_list),
     path(r'engagement/recruiter', recruiter_engagement_list),
     path(r'engagement/recruiter/new', recruiter_engagement_list_new),

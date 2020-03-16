@@ -14,8 +14,6 @@ from .serializers import (
     RecruiterAuthSerializer,
     EngagementSerializer,
     CandidateComplexSerializer,
-    CandidateBasicSerializer,
-    RecruiterBasicSerializer
 )
 
 
@@ -48,7 +46,11 @@ def recruiter_engagement_list(request):
             recruiter = Recruiter.objects.get(user=current_user)
             candidate = Candidate.objects.get(user_id=request.data['candidate'])
             state = request.data['state']
-            engagement = Engagement(state=state, candidate=candidate, recruiter=recruiter)
+            engagement = Engagement(
+                state=state,
+                candidate=candidate,
+                recruiter=recruiter
+            )
             engagement.save()
             return Response(
                 data=engagement.last_change_date,
@@ -81,10 +83,10 @@ def candidate_engagement_list(request):
         engagements = Candidate.objects \
             .get(user=current_user) \
             .get_engagements()
-    except Engagement.DoesNotExist:
+    except Candidate.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     engagement_serializer = EngagementSerializer(engagements, many=True)
-    return Response(engagement_serializer.data)
+    return Response(data=engagement_serializer.data)
 
 
 @api_view(['PUT'])

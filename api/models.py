@@ -53,7 +53,8 @@ class Recruiter(models.Model):
             .filter(recruiter=self) \
             .select_related() \
             .values_list('candidate')
-        known_candidates = Candidate.objects.filter(user_id__in=known_candidates_id)
+        known_candidates = Candidate.objects \
+            .filter(user_id__in=known_candidates_id)
         return all_candidates.difference(known_candidates)
 
     def __str__(self):

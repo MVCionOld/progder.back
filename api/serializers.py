@@ -117,8 +117,8 @@ class RecruiterComplexSerializer(serializers.ModelSerializer):
 
 class EngagementSerializer(serializers.ModelSerializer):
     candidate = CandidateBasicSerializer()
-    recruiter = RecruiterBasicSerializer()
+    recruiter = RecruiterComplexSerializer()
 
     class Meta:
         model = Engagement
-        fields = ('state', 'candidate', 'recruiter')
+        fields = ('id', 'state', 'candidate', 'recruiter')
